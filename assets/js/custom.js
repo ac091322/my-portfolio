@@ -1,28 +1,27 @@
-(function($) {
-  var toggle = document.getElementById("menu-toggle");
-  var menu = document.getElementById("menu");
-  var close = document.getElementById("menu-close");
+(function ($) {
+  var $toggle = $("#menu-toggle");
+  var $menu = $("#menu");
+  var $close = $("#menu-close");
 
-  toggle.addEventListener("click", function(e) {
-    if (menu.classList.contains("open")) {
-      menu.classList.remove("open");
-    } else {
-      menu.classList.add("open");
-    }
+  $toggle.on("click", function () {
+    $menu.toggleClass("open");
   });
 
-  close.addEventListener("click", function(e) {
-    menu.classList.remove("open");
+  $close.on("click", function () {
+    $menu.removeClass("open");
   });
 
   // Close menu after click on smaller screens
-  $(window).on("resize", function() {
+  var resizeHandler = function () {
     if ($(window).width() < 846) {
-      $(".main-menu a").on("click", function() {
-        menu.classList.remove("open");
+      $(".main-menu a").off("click").on("click", function () {
+        $menu.removeClass("open");
       });
     }
-  });
+  };
+
+  $(window).on("resize", resizeHandler);
+  resizeHandler(); // Initial check
 
   $(".owl-carousel").owlCarousel({
     items: 4,
@@ -39,20 +38,20 @@
         items: 1
       },
       1000: {
-        items: 1
+        items: 4
       }
     }
   });
 
-  $(".hover").mouseleave(function() {
+  $(".hover").on("mouseleave", function () {
     $(this).removeClass("hover");
   });
 
-  $(".isotope-wrapper").each(function() {
+  $(".isotope-wrapper").each(function () {
     var $isotope = $(".isotope-box", this);
     var $filterCheckboxes = $('input[type="radio"]', this);
 
-    var filter = function() {
+    var filter = function () {
       var type = $filterCheckboxes.filter(":checked").data("type") || "*";
       if (type !== "*") {
         type = '[data-type="' + type + '"]';
