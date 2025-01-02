@@ -589,6 +589,7 @@ section.my-work .section-heading {
     height: auto;
     border-radius: 5px;
     object-fit: cover;
+    cursor: pointer;
     /* Ensures images cover the space without distortion */
 }
 
