@@ -77,7 +77,8 @@
             <br />
             <br />
             I've always been drawn to structure—seeking stability and consistency in my work and the products I produce.
-            Whether it's coding (which I'm excited to pursue as my future, full-time career), translating documents during my
+            Whether it's coding (which I'm excited to pursue as my future, full-time career), translating documents
+            during my
             localization roles from December 2021 to January 2024, or wireframing projects as a project manager for over
             seven years, I strive for a clear, organized format that brings coherence to the final result. This focus
             isn't about following rigid rules but ensuring each project maintains its own internal logic and clarity.
@@ -485,53 +486,46 @@
   <!-- Bootstrap core JavaScript -->
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
   <script src="assets/js/isotope.min.js"></script>
   <script src="assets/js/owl-carousel.js"></script>
   <script src="assets/js/lightbox.js"></script>
   <script src="assets/js/custom.js"></script>
   <script>
-    //according to loftblog tut
+    var $sections = $(".section");
+    var $menuLinks = $(".main-menu a");
+    var offset = 80;
+
     $(".main-menu li:first").addClass("active");
 
-    var showSection = function showSection(section, isAnimate) {
+    var showSection = function (section, isAnimate) {
       var direction = section.replace(/#/, ""),
-        reqSection = $(".section").filter(
-          '[data-section="' + direction + '"]'
-        ),
-        reqSectionPos = reqSection.offset().top - 0;
+        reqSection = $(".section").filter('[data-section="' + direction + '"]'),
+        reqSectionPos = reqSection.offset().top - offset;
 
       if (isAnimate) {
-        $("body, html").animate(
-          {
-            scrollTop: reqSectionPos
-          },
-          800
-        );
+        $("html, body").animate({ scrollTop: reqSectionPos }, 800);
       } else {
-        $("body, html").scrollTop(reqSectionPos);
+        $("html, body").scrollTop(reqSectionPos);
       }
     };
 
-    var checkSection = function checkSection() {
-      $(".section").each(function () {
+    var checkSection = function () {
+      $sections.each(function () {
         var $this = $(this),
-          topEdge = $this.offset().top - 80,
-          bottomEdge = topEdge + $this.height(),
+          topEdge = $this.offset().top - offset,
+          bottomEdge = topEdge + $this.outerHeight(),
           wScroll = $(window).scrollTop();
+
         if (topEdge < wScroll && bottomEdge > wScroll) {
           var currentId = $this.data("section"),
-            reqLink = $("a").filter("[href*=\\#" + currentId + "]");
-          reqLink
-            .closest("li")
-            .addClass("active")
-            .siblings()
-            .removeClass("active");
+            reqLink = $menuLinks.filter("[href*=\\#" + currentId + "]");
+
+          reqLink.parent().addClass("active").siblings().removeClass("active");
         }
       });
     };
 
-    $(".main-menu").on("click", "a", function (e) {
+    $menuLinks.on("click", function (e) {
       e.preventDefault();
       showSection($(this).attr("href"), true);
     });
@@ -540,6 +534,7 @@
       checkSection();
     });
   </script>
+
 </body>
 
 
