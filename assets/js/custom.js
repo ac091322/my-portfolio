@@ -1,18 +1,29 @@
 (function ($) {
-  var $toggle = $("#menu-toggle");
-  var $menu = $("#menu");
-  var $close = $("#menu-close");
+  const $menuToggle = $("#menu-toggle");
+  const $menu = $("#menu");
+  const $menuClose = $("#menu-close");
 
-  $toggle.on("click", function () {
+  $menuToggle.on("click", function () {
     $menu.toggleClass("open");
   });
 
-  $close.on("click", function () {
+  $menuClose.on("click", function () {
     $menu.removeClass("open");
   });
 
-  // Close menu after click on smaller screens
-  var resizeHandler = function () {
+  // Debounce function for resize event
+  const debounce = function (func, wait) {
+    let timeout;
+    return function () {
+      const context = this, args = arguments;
+      clearTimeout(timeout);
+      timeout = setTimeout(function () {
+        func.apply(context, args);
+      }, wait);
+    };
+  };
+
+  const resizeHandler = function () {
     if ($(window).width() < 846) {
       $(".main-menu a").off("click").on("click", function () {
         $menu.removeClass("open");
@@ -20,7 +31,8 @@
     }
   };
 
-  $(window).on("resize", resizeHandler);
+  const debounceResizeHandler = debounce(resizeHandler, 100);
+  $(window).on("resize", debounceResizeHandler);
   resizeHandler(); // Initial check
 
   $(".owl-carousel").owlCarousel({
@@ -48,18 +60,18 @@
   });
 
   $(".isotope-wrapper").each(function () {
-    var $isotope = $(".isotope-box", this);
-    var $filterCheckboxes = $('input[type="radio"]', this);
+    const $isotopeBox = $(".isotope-box", this);
+    const $filterCheckboxes = $('input[type="radio"]', this);
 
-    var filter = function () {
-      var type = $filterCheckboxes.filter(":checked").data("type") || "*";
+    const filter = function () {
+      let type = $filterCheckboxes.filter(":checked").data("type") || "*";
       if (type !== "*") {
         type = '[data-type="' + type + '"]';
       }
-      $isotope.isotope({ filter: type });
+      $isotopeBox.isotope({ filter: type });
     };
 
-    $isotope.isotope({
+    $isotopeBox.isotope({
       itemSelector: ".isotope-item",
       layoutMode: "masonry"
     });
